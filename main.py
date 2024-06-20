@@ -1,10 +1,11 @@
 #main.py
 #By: Sam Schmitz
 
+from urllib import response
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import crud, models, schemas
-from .database import SessionLocal, engine
+from .sbDatabase import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -17,18 +18,50 @@ def get_db():
     finally:
         db.close()
         
-@app.post("/items/", response_model=schemas.Item)
-def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
-    return crud.create_item(db=db, item=item)
+@app.post("/members/", response_model=schemas.Member)
+def create_member(member: schemas.MemeberCreate, db: Session = Depends(get_db)):
+    return crud.create_member(db=db, member=member)
 
-@app.get("/items/{item_id}", response_model=schemas.Item)
-def read_item(item_id:int, db:Session = Depends(get_db)):
-    db_item = crud.get_item(db, item_id=item_id)
-    if db_item is None:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return db_item
+@app.get("/members/{member_id}", response_model=schemas.Member)
+def read_member(member_id:int, db:Session = Depends(get_db)):
+    db_member = crud.get_member(db, member_id=member_id)
+    if db_member is None:
+        raise HTTPException(status_code=404, detail="Member not found")
+    return db_member
 
-@app.get("/items/", response_model=list[schemas.Item])
-def read_items(skip: int = 0, limit: int = 10, db: Session= Depends(get_db)):
-    items = crud.get_items(db, skip=skip, limit=limit)
-    return items
+@app.get("/members/", response_model=List[schemas.Member])
+def read_members(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    members = crud.get_members(db, skip=skip, limit=limit)
+    return members
+
+@app.post("/stocks/", response_model=schemas.Stock)
+def create_stock(stock: schemas.StockCreate, db: Session = Depends(get_db)):
+    return crud.create_stock(db=db, stock=stock)
+
+@app.get("/stocks/{stock_id}", response_model=schemas.Stock)
+def read_stock(stock_id:int, db: Session = Depends(get_db)):
+    db_stock = crud.get_stock(db, stock_id=stock_id)
+    if db_stock is None:
+        raise HTTPException(status_code=404, detail="Stock not found")
+    return db_stock
+
+@app.get("/stocks/", response_model=List[schemas.Stock])
+def read_stocks(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    stocks = crud.get_stocks(db, skip=skip, limit=limit)
+    return stocks
+
+@app.post("/trades/", response_model=schemas.Trade)
+def create_trade(trade: schemas.TradeCreate, db: Session = Depends(get_db)):
+    return crud.create_trade(db=db, trade=trade)
+
+@app.get("/trade/{trade_id}", response_model=schemas.Trade)
+def read_trade(trade_id: int, db: Session = Depends(get_db)):
+    db_trade = crud.get_trade(db, trade_id=trade_id)
+    if db_trade is None:
+        raise HTTPException(status_code=404, detail="Trade not Found")
+    return db_trade
+
+@app.get("/trades/", response_model=List[schemas.Trade])
+def read_trades(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    trades = crud.get_trades(db, skip=skip, limit=limit)
+    return trades
