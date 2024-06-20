@@ -22,7 +22,7 @@ class Stock(Base):
     tick = Column(String, index=True)
     sector = Column(String, index=True)
     industry = Column(String, index=True)
-    CompnayName = Column(String, index=True)
+    compnayName = Column(String, index=True)
     
 class Trade(Base):
     __tablename__ = "trades"
