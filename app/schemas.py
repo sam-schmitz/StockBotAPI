@@ -53,6 +53,9 @@ class Trade(TradeBase):
 class DateBase(BaseModel):
     date: int
     
+class DateCreate(DateBase):
+    pass
+    
 class NewestDate(DateBase):
     pass
     

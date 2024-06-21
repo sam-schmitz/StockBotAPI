@@ -67,12 +67,20 @@ def read_trades(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     trades = crud.get_trades(db, skip=skip, limit=limit)
     return trades
 
+@app.post("/newestDate/", response_model=schemas.DateCreate)
+def create_newestDate(date:schemas.DateCreate, db: Session = Depends(get_db)):
+    return crud.create_newestDate(db=db, date=date)
+
 @app.get("/newestDate/", response_model=int)
 def read_newestDate(db: Session = Depends(get_db)):
     db_newestDate = crud.get_newestDate(db)
     if db_newestDate is None:
         raise HTTPException(status_code=404, detail="Newest Date not Found")
     return db_newestDate
+
+@app.post("/oldestDate/", response_model=schemas.DateCreate)
+def create_oldestDate(date: schemas.DateCreate, db: Session = Depends(get_db)):
+    return crud.create_oldestDate(db=db, date=date)
 
 @app.get("/oldestDate/", response_model=int)
 def read_oldestDate(db: Session = Depends(get_db)):

@@ -57,6 +57,19 @@ def create_trade(db: Session, trade:schemas.TradeCreate):
 def get_newestDate(db: Session):
     return db.query(func.max(models.NewestDate.date)).scalar()
 
+def create_newestDate(db: Session, date:schemas.DateCreate):
+    db_newestDate = models.NewestDate(date=date.date)
+    db.add(db_newestDate)
+    db.commit()
+    db.refresh(db_newestDate)
+    return db_newestDate
+
 def get_oldestDate(db: Session):
     return db.query(func.min(models.OldestDate.date)).scalar()
 
+def create_oldestDate(db: Session, date:schemas.DateCreate):
+    db_oldestDate = models.OldestDate(date=date.date)
+    db.add(db_oldestDate)
+    db.commit()
+    db.refresh(db_oldestDate)
+    return db_oldestDate
