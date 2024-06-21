@@ -50,6 +50,18 @@ def get_trades(db: Session, skip: int = 0, limit: int = 10):
 def get_trades_by_memberID(db: Session, memberID: int):
     return db.query(models.Trade).filter(models.Trade.memberID == memberID).all()
 
+def get_trades_by_stockID(db: Session, stockID: int):
+    return db.query(models.Trade).filter(models.Trade.stockID == stockID).all()
+
+def get_trades_with_dateBought_before(db: Session, date: int):
+    return db.query(models.Trade).filter(models.Trade.dateBought > date).all()
+
+def get_trades_with_dateDisclosed_before(db: Session, date: int):
+    return db.query(models.Trade).filter(models.Trade.dateDisclosed > date).all()
+
+def get_trades_with_less_delay(db: Session, delay: int):
+    return db.query(models.Trade).filter(models.Trade.delay < delay).all()
+
 def create_trade(db: Session, trade:schemas.TradeCreate):
     db_trade = models.Trade(saleType=trade.saleType, 
                             dateBought=trade.dateBought,
