@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 class MemberBase(BaseModel):
-    comittees: str
+    comittees: Optional[str] = None
     name: str
     
 class MemberCreate(MemberBase):
@@ -35,10 +35,10 @@ class Stock(StockBase):
 class TradeBase(BaseModel):
     saleType: str
     dateBought: int
-    priceBought: int
+    priceBought: float
     dateDisclosed: int
     delay: int
-    crossover: int
+    crossover: Optional[int] = None
     size: int
     
 class TradeCreate(TradeBase):

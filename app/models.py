@@ -13,7 +13,7 @@ Base = declarative_base()
 class Member(Base):
     __tablename__ = "members"
     memberID = Column(Integer, primary_key=True, index=True)
-    comittees = Column(String, index=True)
+    comittees = Column(String, index=True, nullable=True)
     name = Column(String, index=True)
 
 class Stock(Base):
@@ -22,19 +22,19 @@ class Stock(Base):
     tick = Column(String, index=True)
     sector = Column(String, index=True)
     industry = Column(String, index=True)
-    compnayName = Column(String, index=True)
+    companyName = Column(String, index=True)
     
 class Trade(Base):
     __tablename__ = "trades"
     tradeID = Column(Integer, primary_key=True, index=True)
     stockID = Column(Integer, ForeignKey('stocks.stockID'))
     saleType = Column(String, index=True)
-    memberID = Column(Integer, ForeignKey('members.membersID'))
+    memberID = Column(Integer, ForeignKey('members.memberID'))
     dateBought = Column(Integer, index=True)
     priceBought = Column(Float)
     dateDisclosed = Column(Integer, index=True)
     delay = Column(Integer)
-    crossover = Column(Integer)
+    crossover = Column(Integer, nullable=True)
     size = Column(Integer)
     
     stock = relationship("Stock")
