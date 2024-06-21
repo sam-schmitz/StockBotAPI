@@ -15,7 +15,7 @@ class Member(MemberBase):
     memberID: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
         
 class StockBase(BaseModel):
     tick: str
@@ -30,7 +30,7 @@ class Stock(StockBase):
     stockID: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
         
 class TradeBase(BaseModel):
     saleType: str
@@ -48,5 +48,5 @@ class Trade(TradeBase):
     tradeID: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
     

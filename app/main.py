@@ -5,7 +5,8 @@ from urllib import response
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import crud, models, schemas
-from .sbDatabase import SessionLocal, engine
+from .database import SessionLocal, engine
+from typing import List, Optional
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -19,7 +20,7 @@ def get_db():
         db.close()
         
 @app.post("/members/", response_model=schemas.Member)
-def create_member(member: schemas.MemeberCreate, db: Session = Depends(get_db)):
+def create_member(member: schemas.MemberCreate, db: Session = Depends(get_db)):
     return crud.create_member(db=db, member=member)
 
 @app.get("/members/{member_id}", response_model=schemas.Member)
