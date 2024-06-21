@@ -2,6 +2,7 @@
 #By: Sam Schmitz
 
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 from . import models, schemas
 
 def get_member(db: Session, member_id:int):
@@ -54,8 +55,8 @@ def create_trade(db: Session, trade:schemas.TradeCreate):
     return db_trade
 
 def get_newestDate(db: Session):
-    return db.query(models.NewestDate).all()
+    return db.query(func.max(models.NewestDate.date)).scalar()
 
 def get_oldestDate(db: Session):
-    return db.query(models.OldestDate).all()
+    return db.query(func.min(models.OldestDate.date)).scalar()
 

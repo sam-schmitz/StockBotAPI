@@ -42,11 +42,11 @@ class Trade(Base):
     
 class NewestDate(Base):
     __tablename__ = "newestDate"
-    date = Column(Integer, index=True)
+    date = Column(Integer, primary_key=True, index=True)
     
 class OldestDate(Base):
     __tablename__ = "oldestDate"
-    date = Column(Integer, index=True)
+    date = Column(Integer, primary_key=True, index=True)
     
     
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread":False})
