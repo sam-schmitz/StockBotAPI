@@ -53,3 +53,9 @@ def create_trade(db: Session, trade:schemas.TradeCreate):
     db.refresh(db_trade)
     return db_trade
 
+def get_newestDate(db: Session):
+    return db.query(models.NewestDate).all()
+
+def get_oldestDate(db: Session):
+    return db.query(models.OldestDate).all()
+

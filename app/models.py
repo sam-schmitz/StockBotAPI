@@ -40,6 +40,14 @@ class Trade(Base):
     stock = relationship("Stock")
     member = relationship("Member")
     
+class NewestDate(Base):
+    __tablename__ = "newestDate"
+    date = Column(Integer, index=True)
+    
+class OldestDate(Base):
+    __tablename__ = "oldestDate"
+    date = Column(Integer, index=True)
+    
     
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread":False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

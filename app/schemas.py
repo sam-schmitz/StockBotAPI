@@ -49,4 +49,18 @@ class Trade(TradeBase):
     
     class Config:
         from_attributes = True
+        
+class NewestDateBase(BaseModel):
+    date: int
+    
+class NewestDate(NewestDateBase):
+    class Config:
+        from_attributes = True
+        
+class OldestDateBase(BaseModel):
+    date: int
+    
+class OldestDate(OldestDateBase):
+    class Config:
+        from_attributes = True
     
