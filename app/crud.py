@@ -47,6 +47,9 @@ def get_trade(db: Session, trade_id:int):
 def get_trades(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Trade).offset(skip).limit(limit).all()
 
+def get_trades_by_memberID(db: Session, memberID: int):
+    return db.query(models.Trade).filter(models.Trade.memberID == memberID).all()
+
 def create_trade(db: Session, trade:schemas.TradeCreate):
     db_trade = models.Trade(saleType=trade.saleType, 
                             dateBought=trade.dateBought,

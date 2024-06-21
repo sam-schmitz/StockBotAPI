@@ -81,6 +81,13 @@ def read_trades(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     trades = crud.get_trades(db, skip=skip, limit=limit)
     return trades
 
+@app.get("/trades/{memberID}", response_model=List[schemas.Trade])
+def read_trades_by_memberID(memberID: int, db: Session = Depends(get_db)):
+    trades = crud.get_trades_by_memberID(db, memberID=memberID)
+    if not trades:
+        raise HTTPException(status_code=404, detail=f"No trades found for trader_id {memberID}")
+    return trades
+
 @app.post("/newestDate/", response_model=schemas.DateCreate)
 def create_newestDate(date:schemas.DateCreate, db: Session = Depends(get_db)):
     return crud.create_newestDate(db=db, date=date)
