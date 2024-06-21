@@ -25,7 +25,14 @@ def create_member(member: schemas.MemberCreate, db: Session = Depends(get_db)):
 
 @app.get("/members/{member_id}", response_model=schemas.Member)
 def read_member(member_id:int, db:Session = Depends(get_db)):
-    db_member = crud.get_member(db, member_id=member_id)
+    db_member = crud.get_member_by_id(db, member_id=member_id)
+    if db_member is None:
+        raise HTTPException(status_code=404, detail="Member not found")
+    return db_member
+
+@app.get("/members/name/{member_name}", response_model=schemas.Member)
+def read_member_by_name(member_name: str, db: Session = Depends(get_db)):
+    db_member = crud.get_member_by_name(db, name=member_name)
     if db_member is None:
         raise HTTPException(status_code=404, detail="Member not found")
     return db_member
@@ -41,7 +48,14 @@ def create_stock(stock: schemas.StockCreate, db: Session = Depends(get_db)):
 
 @app.get("/stocks/{stock_id}", response_model=schemas.Stock)
 def read_stock(stock_id:int, db: Session = Depends(get_db)):
-    db_stock = crud.get_stock(db, stock_id=stock_id)
+    db_stock = crud.get_stock_by_id(db, stock_id=stock_id)
+    if db_stock is None:
+        raise HTTPException(status_code=404, detail="Stock not found")
+    return db_stock
+
+@app.get("/stocks/tick/{stock_tick}", response_model=schemas.Stock)
+def read_stock_by_tick(stock_tick: str, db: Session = Depends(get_db)):
+    db_stock = crud.get_stock_by_tick(db, tick=stock_tick)
     if db_stock is None:
         raise HTTPException(status_code=404, detail="Stock not found")
     return db_stock

@@ -5,8 +5,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from . import models, schemas
 
-def get_member(db: Session, member_id:int):
+def get_member_by_id(db: Session, member_id:int):
     return db.query(models.Member).filter(models.Member.memberID == member_id).first()
+
+def get_member_by_name(db: Session, name: str):
+    return db.query(models.Member).filter(models.Member.name == name).first()
 
 def get_members(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Member).offset(skip).limit(limit).all()
@@ -19,8 +22,11 @@ def create_member(db: Session, member:schemas.MemberCreate):
     db.refresh(db_member)
     return db_member
 
-def get_stock(db: Session, stock_id: int):
+def get_stock_by_id(db: Session, stock_id: int):
     return db.query(models.Stock).filter(models.Stock.stockID == stock_id).first()
+
+def get_stock_by_tick(db: Session, tick: str):
+    return db.query(models.Stock).filter(models.Stock.tick == tick).first()
 
 def get_stocks(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Stock).offset(skip).limit(limit).all()
