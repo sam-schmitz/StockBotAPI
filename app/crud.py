@@ -63,7 +63,7 @@ def get_trades_by_filter(db: Session, skip: int = 0, limit: int = 10,
     if dateDisclosed:
         q = q.filter(models.Trade.dateDisclosed >= dateDisclosed)
     if delay:
-        q = q.filter(models.Trade.delay == delay)
+        q = q.filter(models.Trade.delay <= delay)
     return q.offset(skip).limit(limit).all()
 
 def get_trades_by_memberID(db: Session, memberID: int):
