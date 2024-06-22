@@ -33,6 +33,7 @@ class Trade(Base):
     dateBought = Column(Integer, index=True)
     priceBought = Column(Float)
     dateDisclosed = Column(Integer, index=True)
+    priceDisclosed = Column(Float)
     delay = Column(Integer)
     crossover = Column(Integer, nullable=True)
     size = Column(Integer)

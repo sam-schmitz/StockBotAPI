@@ -33,10 +33,13 @@ class Stock(StockBase):
         from_attributes = True
         
 class TradeBase(BaseModel):
+    memberID: int
+    stockID: int
     saleType: str
     dateBought: int
     priceBought: float
     dateDisclosed: int
+    priceDisclosed: float
     delay: int
     crossover: Optional[int] = None
     size: int
