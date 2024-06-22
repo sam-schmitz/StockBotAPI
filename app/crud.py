@@ -47,20 +47,30 @@ def get_trade(db: Session, trade_id:int):
 def get_trades(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Trade).offset(skip).limit(limit).all()
 
+
+def get_trades_by_filter(db: Session, skip: int = 0, limit: int = 10,
+                         memberID: int = None, stockID: int = None,
+                         dateBought: int = None, dateDisclosed: int = None,
+                         delay: int = None):
+    q = db.query(models.Trade)
+    if memberID:
+        q = q.filter(models.Trade.memberID == memberID)
+    if stockID:
+        print(f"filtering for stockID {stockID}")
+        q = q.filter(models.Trade.stockID == stockID)
+    if dateBought:
+        q = q.filter(models.Trade.dateBought == dateBought)
+    if dateDisclosed:
+        q = q.filter(models.Trade.dateDisclosed == dateDisclosed)
+    if delay:
+        q = q.filter(models.Trade.delay == delay)
+    return q.offset(skip).limit(limit).all()
+
 def get_trades_by_memberID(db: Session, memberID: int):
     return db.query(models.Trade).filter(models.Trade.memberID == memberID).all()
 
 def get_trades_by_stockID(db: Session, stockID: int):
     return db.query(models.Trade).filter(models.Trade.stockID == stockID).all()
-
-def get_trades_with_dateBought_before(db: Session, date: int):
-    return db.query(models.Trade).filter(models.Trade.dateBought > date).all()
-
-def get_trades_with_dateDisclosed_before(db: Session, date: int):
-    return db.query(models.Trade).filter(models.Trade.dateDisclosed > date).all()
-
-def get_trades_with_less_delay(db: Session, delay: int):
-    return db.query(models.Trade).filter(models.Trade.delay < delay).all()
 
 def create_trade(db: Session, trade:schemas.TradeCreate):
     db_trade = models.Trade(saleType=trade.saleType, 

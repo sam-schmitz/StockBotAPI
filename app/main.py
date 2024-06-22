@@ -2,7 +2,7 @@
 #By: Sam Schmitz
 
 from urllib import response
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from . import crud, models, schemas
 from .database import SessionLocal, engine
@@ -79,6 +79,23 @@ def read_trade(trade_id: int, db: Session = Depends(get_db)):
 @app.get("/trades/", response_model=List[schemas.Trade])
 def read_trades(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     trades = crud.get_trades(db, skip=skip, limit=limit)
+    return trades
+
+@app.get("/trades/filter/", response_model=List[schemas.Trade])
+def read_trades_by_filter(skip: int = 0,
+                          limit: int = 10,
+                          memberID: Optional[int] = Query(None),
+                          stockID: Optional[int] = Query(None),
+                          dateBought: Optional[int] = Query(None),
+                          dateDisclosed: Optional[int] = Query(None),
+                          delay: Optional[int] = Query(None),
+                          db: Session = Depends(get_db)):
+    trades = crud.get_trades_by_filter(db, skip=skip, limit=limit,
+                                       memberID=memberID, stockID=stockID,
+                                       dateBought=dateBought,
+                                       dateDisclosed=dateDisclosed, delay=delay)
+    if not trades:
+        raise HTTPException(status_code=404, detail="Trades not found")
     return trades
 
 @app.get("/trades/{memberID}", response_model=List[schemas.Trade])
