@@ -95,14 +95,21 @@ def read_trades_by_filter(skip: int = 0,
                                        dateBought=dateBought,
                                        dateDisclosed=dateDisclosed, delay=delay)
     if not trades:
-        raise HTTPException(status_code=404, detail="Trades not found")
+        raise HTTPException(status_code=404, detail="Trades not found for the given filters")
     return trades
 
-@app.get("/trades/{memberID}", response_model=List[schemas.Trade])
+@app.get("/trades/member/{memberID}", response_model=List[schemas.Trade])
 def read_trades_by_memberID(memberID: int, db: Session = Depends(get_db)):
     trades = crud.get_trades_by_memberID(db, memberID=memberID)
     if not trades:
         raise HTTPException(status_code=404, detail=f"No trades found for trader_id {memberID}")
+    return trades
+
+@app.get("/trades/stock/{stock_id}", response_model=List[schemas.Trade])
+def read_trades_by_stockID(stockID: int, db: Session = Depends(get_db)):
+    trades = crud.get_trades_by_stockID(db, stockID=stockID)
+    if not trades:
+        raise HTTPException(status_code=404, detail=f"No trades fond for stock_id {stockID}")
     return trades
 
 @app.post("/newestDate/", response_model=schemas.DateCreate)
