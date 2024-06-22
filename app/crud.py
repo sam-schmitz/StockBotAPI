@@ -59,9 +59,9 @@ def get_trades_by_filter(db: Session, skip: int = 0, limit: int = 10,
         print(f"filtering for stockID {stockID}")
         q = q.filter(models.Trade.stockID == stockID)
     if dateBought:
-        q = q.filter(models.Trade.dateBought == dateBought)
+        q = q.filter(models.Trade.dateBought >= dateBought)
     if dateDisclosed:
-        q = q.filter(models.Trade.dateDisclosed == dateDisclosed)
+        q = q.filter(models.Trade.dateDisclosed >= dateDisclosed)
     if delay:
         q = q.filter(models.Trade.delay == delay)
     return q.offset(skip).limit(limit).all()
