@@ -73,10 +73,13 @@ def get_trades_by_stockID(db: Session, stockID: int):
     return db.query(models.Trade).filter(models.Trade.stockID == stockID).all()
 
 def create_trade(db: Session, trade:schemas.TradeCreate):
-    db_trade = models.Trade(saleType=trade.saleType, 
+    db_trade = models.Trade(memberID=trade.memberID,
+                            stockID=trade.stockID,
+                            saleType=trade.saleType, 
                             dateBought=trade.dateBought,
                             priceBought=trade.priceBought,
                             dateDisclosed=trade.dateDisclosed,
+                            priceDisclosed=trade.priceDisclosed,
                             delay=trade.delay,
                             crossover=trade.crossover,
                             size=trade.size)
