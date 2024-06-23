@@ -64,4 +64,20 @@ class NewestDate(DateBase):
     
 class OldestDate(DateBase):
     pass
+
+class User(BaseModel):
+    username: str
+    
+    class Config:
+        orm_mode = True
+        
+class UserCreate(User):
+    password: str
+    
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    
+class TokenData(BaseModel):
+    username: str | None = None
     

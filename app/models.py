@@ -49,6 +49,12 @@ class OldestDate(Base):
     __tablename__ = "oldestDate"
     date = Column(Integer, primary_key=True, index=True)
     
+class User(Base):
+    __tablename__ = "users"
+    userID = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    
     
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread":False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

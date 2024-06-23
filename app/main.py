@@ -4,13 +4,16 @@
 from urllib import response
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from . import crud, models, schemas
+from . import crud, models, schemas, security
 from .database import SessionLocal, engine
 from typing import List, Optional
+from .auth import router as auth_router, get_current_user
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.include_router(auth_router)
 
 def get_db():
     db = SessionLocal()
