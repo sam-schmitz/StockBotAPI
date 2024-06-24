@@ -1,11 +1,10 @@
 #main.py
 #By: Sam Schmitz
 
-from urllib import response
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from . import crud, models, schemas, security
-from .database import SessionLocal, engine
+from . import crud, models, schemas
+from .database import engine, get_db
 from typing import List, Optional
 from .auth import router as auth_router, get_current_user
 
@@ -13,17 +12,11 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.include_router(auth_router)
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app.include_router(auth_router, prefix="/auth")
         
 @app.post("/members/", response_model=schemas.Member)
-def create_member(member: schemas.MemberCreate, db: Session = Depends(get_db)):
+def create_member(member: schemas.MemberCreate, db: Session = Depends(get_db),
+                current_user: schemas.User = Depends(get_current_user)):
     return crud.create_member(db=db, member=member)
 
 @app.get("/members/{member_id}", response_model=schemas.Member)
@@ -46,7 +39,8 @@ def read_members(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return members
 
 @app.post("/stocks/", response_model=schemas.Stock)
-def create_stock(stock: schemas.StockCreate, db: Session = Depends(get_db)):
+def create_stock(stock: schemas.StockCreate, db: Session = Depends(get_db),
+                current_user: schemas.User = Depends(get_current_user)):
     return crud.create_stock(db=db, stock=stock)
 
 @app.get("/stocks/{stock_id}", response_model=schemas.Stock)
@@ -69,7 +63,8 @@ def read_stocks(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return stocks
 
 @app.post("/trades/", response_model=schemas.Trade)
-def create_trade(trade: schemas.TradeCreate, db: Session = Depends(get_db)):
+def create_trade(trade: schemas.TradeCreate, db: Session = Depends(get_db),
+                current_user: schemas.User = Depends(get_current_user)):
     return crud.create_trade(db=db, trade=trade)
 
 @app.get("/trade/{trade_id}", response_model=schemas.Trade)
@@ -116,7 +111,8 @@ def read_trades_by_stockID(stockID: int, db: Session = Depends(get_db)):
     return trades
 
 @app.post("/newestDate/", response_model=schemas.DateCreate)
-def create_newestDate(date:schemas.DateCreate, db: Session = Depends(get_db)):
+def create_newestDate(date:schemas.DateCreate, db: Session = Depends(get_db),
+                current_user: schemas.User = Depends(get_current_user)):
     return crud.create_newestDate(db=db, date=date)
 
 @app.get("/newestDate/", response_model=int)
@@ -127,7 +123,8 @@ def read_newestDate(db: Session = Depends(get_db)):
     return db_newestDate
 
 @app.post("/oldestDate/", response_model=schemas.DateCreate)
-def create_oldestDate(date: schemas.DateCreate, db: Session = Depends(get_db)):
+def create_oldestDate(date: schemas.DateCreate, db: Session = Depends(get_db),
+                current_user: schemas.User = Depends(get_current_user)):
     return crud.create_oldestDate(db=db, date=date)
 
 @app.get("/oldestDate/", response_model=int)
