@@ -1,0 +1,8 @@
+#Ignore the configuration file
+app/config.py
+
+#ignore Python stuff
+app/__pycache__
+__pycache__
+
+#ig

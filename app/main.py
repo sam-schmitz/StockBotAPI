@@ -1,18 +1,22 @@
 #main.py
 #By: Sam Schmitz
 
+from msilib import schema
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from . import crud, models, schemas
 from .database import engine, get_db
 from typing import List, Optional
 from .auth import router as auth_router, get_current_user
+from mangum import Mangum
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 app.include_router(auth_router, prefix="/auth")
+
+handler = Mangum(app)
         
 @app.post("/members/", response_model=schemas.Member)
 def create_member(member: schemas.MemberCreate, db: Session = Depends(get_db),
@@ -133,3 +137,11 @@ def read_oldestDate(db: Session = Depends(get_db)):
     if db_oldestDate is None:
         raise HTTPException(status_code=404, detail="Oldest Date not Found")
     return db_oldestDate
+
+@app.post("/users/", response_model=schemas.User)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db),
+                current_user: schemas.User = Depends(get_current_user)):
+    db_user = crud.get_user_by_username(db, username=user.username)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Username already registered")
+    return crud.create_user(db=db, user=user)

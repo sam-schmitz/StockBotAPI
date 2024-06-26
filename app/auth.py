@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 from typing import Optional
 from . import crud, models, schemas
 from .main import get_db
+from .config import SECRET_KEY
 
-SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
